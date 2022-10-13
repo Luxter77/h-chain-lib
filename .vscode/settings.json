@@ -1,0 +1,6 @@
+{
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": ["--disable=C0111,C0115,C0116,C0411,C0103,W0622,C0321,C0325,C0301"],
+    "python.linting.enabled": true,
+    "python.linting.pylamaEnabled": false
+}

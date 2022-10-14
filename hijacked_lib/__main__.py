@@ -1,43 +1,20 @@
 from .chain import Logger, Chain
+from typing import Tuple
 
-import psutil
-import glob
+from glob import glob
 import os
 
 PID = os.getpid()
 
-def main():
-    logger = Logger(log_dir='LOGs')
-
-    process = psutil.Process(PID)
-
-    logger.log('PID: ' + str(PID))
-    logger.log('process: ' + str(process))
-
-    logger.log('before chain instance:')
-    logger.log(process.memory_info())
-    c = Chain(5, [], object(), False, logger, None)
-
-    files = list(glob.glob(os.path.join("TXTs", "*.txt")))
-
-    logger.log('before files add:')
-    logger.log(process.memory_info())
+def main() -> Tuple[Chain, Logger]:
+    l = Logger(log_dir='LOGs')
+    c = Chain(5, [], object(), False, l, None)
+    files = list(glob(os.path.join("TXTs", "*.txt")))
     c.parallel_add_files(files)
-
-    logger.log('before prune:')
-    logger.log(process.memory_info())
     c.prune_chain()
-
-    logger.log('before freeze:')
-    logger.log(process.memory_info())
     c.freeze_chain()
-
-    logger.log('before generate:')
-    logger.log(process.memory_info())
     print(c.generate(lenght=15))
-
-    return c
-
+    return c, l
 
 if __name__ == '__main__':
-    main()
+    (c_, l_) = main()

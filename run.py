@@ -7,6 +7,6 @@ from traitlets.config import get_config
 conf = get_config()
 conf.InteractiveShellEmbed.colors = "Linux"
 
-c = main()
+c, l = main()
 
 embed(config=conf)

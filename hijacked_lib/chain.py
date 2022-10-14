@@ -162,11 +162,15 @@ class Chain:
         self._add_id_seq(self.trans(tuple(text)))
         if self.prune_on_add:
             self.prune_chain()
-        gc.collect()
 
     def add_lines_from_file(self, file: os.PathLike, pos: int, sep: str = None):
+        nt = 0
         for line in tqdm(open(file, "r", encoding="utf-8").readlines(), leave=False, position=pos, desc=f"Chaining from [ {file} ]"):
             self.add_text(line, sep)
+            nt += 1
+            if nt == 100:
+                nt = 0
+                gc.collect()
 
     def parallel_add_files(self, files: Sequence):
         with self.treads as pool:

@@ -4,9 +4,8 @@ from typing import Tuple
 from glob import glob
 import os
 
-PID = os.getpid()
-
 def main() -> Tuple[Chain, Logger]:
+    "This one is for demo/testing porpuses :P"
     l = Logger(log_dir='LOGs')
     c = Chain(5, [], object(), False, l, None)
     files = list(glob(os.path.join("TXTs", "*.txt")))
@@ -14,7 +13,7 @@ def main() -> Tuple[Chain, Logger]:
     c.prune_chain()
     c.freeze_chain()
     print(c.generate(lenght=15))
-    return c, l
+    return (c, l)
 
 if __name__ == '__main__':
     (c_, l_) = main()

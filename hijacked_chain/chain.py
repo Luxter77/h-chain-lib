@@ -3,6 +3,7 @@ from typing import Dict, Iterable, List, Tuple, Union
 from collections import defaultdict, Counter
 from collections.abc import Sequence
 from unicodedata import normalize
+from hijacked_log import Logger, LogTypes
 from tqdm.auto import tqdm
 from threading import Lock
 from random import choice
@@ -10,7 +11,6 @@ import numpy as np
 import gc
 import os
 
-from .lloger import Logger, LogType
 from .patterns import PUNCTUATIONS, SIDED
 
 def sliding_window(iterable: Iterable, size: int = 2) -> Iterable[Tuple[int]]:
@@ -239,9 +239,9 @@ class Chain:
             with self.chain_lock:
                 if ids in self.chain:
                     pick = choice(self.chain[ids])
-                    self.logger.log([self.trans(self.chain[ids]), self.trans((pick,))], logtype=LogType.DBG_)
+                    self.logger.log([self.trans(self.chain[ids]), self.trans((pick,))], logtype=LogTypes.DBG_)
                 elif stop_on_end:
-                    self.logger.log([ids, WORD_NOT__FOUND.int, START_OF_WINDOW.int], logtype=LogType.DBG_)
+                    self.logger.log([ids, WORD_NOT__FOUND.int, START_OF_WINDOW.int], logtype=LogTypes.DBG_)
                     return WORD_NOT__FOUND.int
                 else:
                     pick = choice(self.hot_entrypoint)
@@ -253,9 +253,9 @@ class Chain:
         while (pick == START_OF_WINDOW.int):
             if ids in self.frozen:
                 pick = int(np.random.choice(self.frozen[ids][:, 0], p=self.frozen[ids][:, 1]))
-                self.logger.log([self.trans(self.frozen[ids][:, 0]), self.trans((pick,))], logtype=LogType.DBG_)
+                self.logger.log([self.trans(self.frozen[ids][:, 0]), self.trans((pick,))], logtype=LogTypes.DBG_)
             elif stop_on_end:
-                self.logger.log([ids, WORD_NOT__FOUND.int, START_OF_WINDOW.int], logtype=LogType.DBG_)
+                self.logger.log([ids, WORD_NOT__FOUND.int, START_OF_WINDOW.int], logtype=LogTypes.DBG_)
                 return WORD_NOT__FOUND.int
             else:
                 pick = choice(self.frozen_entrypoint)

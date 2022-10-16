@@ -119,6 +119,7 @@ class Chain:
             raise(NotYetFrozenError())
 
     def preprocessor(self, text: str) -> str:
+        "Turns human generated text into machine readable text"
         text = (' ' + normalize('NFKC', text) + ' ')
 
         for punct in PUNCTUATIONS:
@@ -132,7 +133,8 @@ class Chain:
         return text.lower()
 
     def posprocessor(self, text: str) -> str:
-        text = normalize('NFKC', text).replace('  ', ' ')
+        "Turns machine generated text into human readable text"
+        text = ' ' + normalize('NFKC', text).replace('  ', ' ') + ' '
 
         for punct in PUNCTUATIONS:
             text = text.replace(f" {punct}", punct)
@@ -140,7 +142,7 @@ class Chain:
         for side in SIDED:
             text = text.replace(f" _{side} ", f"{side} ").replace(f" {side}_ ", f" {side}")
 
-        return ' '.join(text.split())
+        return ' '.join(text.split()).capitalize()
 
     def _add_id_seq(self, text: List[int]):
         with self.chain_lock:
